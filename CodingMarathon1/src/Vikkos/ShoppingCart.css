@@ -1,0 +1,63 @@
+body {
+    background-color: hsl(200, 100%, 70%);
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif, serif;
+}
+
+.shopping-cart h1 {
+    margin: 4rem;
+    font-size: 3rem;
+}
+
+.input-fields {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.input-fields input {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.input-fields button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: hsl(120, 60%, 50%);
+    color: white;
+    border-radius: 4px;
+}
+
+.input-fields button:hover {
+    background-color: hsl(120, 60%, 40%);
+}
+
+.listing {
+    background-color: hsla(0, 0%, 71%, 0.541);
+    max-width: fit-content;
+    height: 80px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 15px;
+}
+
+.delete-button {
+    background-color: hsl(0, 100%, 60%);
+    margin-left: 2rem;
+    padding: 10px;
+}
+
+.delete-button:hover {
+    background-color: hsl(0, 100%, 40%);
+}

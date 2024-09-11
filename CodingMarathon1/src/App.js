@@ -1,10 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 
+/*
 import BookCollectionManager from ''
 import ContactListManager from ''
 import RecipeManager from ''
-import RecipeShoppingCartManager from ''
+*/
+import RecipeShoppingCartManager from './Vikkos/ShoppingCart'
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
       <ContactListManager />
       <RecipeManager />
       <RecipeShoppingCartManager /> */}
+      <RecipeShoppingCartManager />
     </div>
   );
 }
