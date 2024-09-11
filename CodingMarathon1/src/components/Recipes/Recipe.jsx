@@ -1,20 +1,20 @@
 import React from "react"
 
-const Recipe = ({ item, onDelete }) => {
+const Recipe = ({ item,id, onDelete }) => {
     const handleDelete = () => {
-        onDelete(item.id); // Pass the item's ID to the parent component for deletion
+        onDelete(id); // Pass the item's ID to the parent component for deletion
       };
 
     return(
     <article className="Recipe-Card">
         <div className="Recipe-Info">
             <div className="Recipe-Title">
-                <h2>{item.name}</h2>
+                <h3>{item.name}</h3>
             </div>
             <div className="Preparation-Instructions">
-                <h3>Ingredients</h3>
+                <h4>Ingredients</h4>
                 <p>{item.ingredients}</p>
-                <h3>Instructions</h3>
+                <h4>Instructions</h4>
                 <p>{item.instructions}</p>
             </div>
         </div>

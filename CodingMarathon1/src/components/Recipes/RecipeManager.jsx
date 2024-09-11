@@ -14,12 +14,12 @@ function RecipeManager() {
   function addRecipe() {
     if (newRecipe.name.trim() !== "" && newRecipe.ingredients.trim() !== "") {
       setRecipes((r) => [...r, newRecipe]);
-      setNewRecipe({ name: "", ingredients: "" });
+      setNewRecipe({ name: "", ingredients: "", instructions: "" });
     }
   }
 
   function deleteRecipe(index) {
-    const updatedRecipes = recipes.filter((_, i) => i !== index);
+    const updatedRecipes = recipes.filter((recipe, i) => i !== index);
     setRecipes(updatedRecipes);
   }
 
@@ -36,18 +36,28 @@ function RecipeManager() {
         />
         <input
           type="text"
-          placeholder="Enter ingredients..."
+          placeholder="Enter ingredients separated by ,"
           name="ingredients"
           value={newRecipe.ingredients}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          placeholder="Enter instructions separated by ,"
+          name="instructions"
+          value={newRecipe.instructions}
           onChange={handleInputChange}
         />
         <button onClick={addRecipe}>Add Recipe</button>
       </div>
       <div className="section-center featured-center">
+        <h2>Available Recipes</h2>
         {recipes.map((recipe, index) => {
+
           return (
             <Recipe
               item={recipe}
+              id={index}
               key={index}
               onDelete={deleteRecipe}
             />
