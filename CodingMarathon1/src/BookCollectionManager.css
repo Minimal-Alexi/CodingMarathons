@@ -1,0 +1,68 @@
+body {
+  background-color: #2a4663;
+}
+.book-collection {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .book-collection h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .book-collection input[type="text"],
+  .book-collection input[type="number"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .book-collection button {
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .book-collection button:hover {
+    background-color: #0056b3;
+  }
+  
+  .book-collection ol {
+    padding-left: 20px;
+  }
+  
+  .book-collection li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .book-collection li button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .book-collection li button:hover {
+    background-color: #c82333;
+  }
