@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Item from "../components/Item";
+import Item from "./Item";
 import './ShoppingCart.css';
 
 function ShoppingCart() {

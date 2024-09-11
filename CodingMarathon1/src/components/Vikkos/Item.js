@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../Vikkos/ShoppingCart.css';
+import './ShoppingCart.css';
 
 const Item = ({ item, index, deleteItem }) => {
     return (

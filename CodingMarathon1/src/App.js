@@ -1,20 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
 
-/*
-import BookCollectionManager from ''
-import ContactListManager from ''
-import RecipeManager from ''
-*/
-import RecipeShoppingCartManager from './Vikkos/ShoppingCart'
+
+import BookCollectionManager from './components/Book/BookCollectionManager'
+import ContactListManager from './components/Contact/ContactListManage'
+import RecipeManager from './components/Recipes/RecipeManager'
+import RecipeShoppingCartManager from './components/Vikkos/ShoppingCart'
 
 function App() {
   return (
     <div className="App">
-{/*       <BookCollectionManager />
+      <BookCollectionManager />
       <ContactListManager />
       <RecipeManager />
-      <RecipeShoppingCartManager /> */}
       <RecipeShoppingCartManager />
     </div>
   );

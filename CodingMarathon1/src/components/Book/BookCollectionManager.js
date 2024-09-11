@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Book from './Book';
-
+import './BookCollectionManager.css'
 
 function BookCollectionManager() {
   const [books, setBooks] = useState([]);
