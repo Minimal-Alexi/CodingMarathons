@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ContactListManage.css";
+import Contact from "./Contact.js";
 
 function ContactListManager() {
   const [contacts, setContacts] = useState([]);
@@ -11,7 +12,7 @@ function ContactListManager() {
 
   function handleInputChange(event) {
     const { name, value } = event.target;
-    console.log(event.target)
+    console.log(event.target);
     setNewContact((prevContact) => ({ ...prevContact, [name]: value }));
   }
 
@@ -59,16 +60,9 @@ function ContactListManager() {
         <button onClick={addContact}>Add Contact</button>
       </div>
       <ol>
-        {contacts.map((contact, index) => (
-          <li key={index}>
-            <div className="contact-display">
-              <p><strong>Name: </strong> {contact.name}</p>
-              <p><strong>Email: </strong> {contact.email}</p>
-              <p><strong>Phone Number: </strong>{contact.phone}</p>
-            </div>
-            <button onClick={() => deleteContact(index)}>Delete</button>
-          </li>
-        ))}
+        {contacts.map((contact, index) => {
+          return <Contact {...contact} key={index} onDelete={deleteContact} />;
+        })}
       </ol>
     </div>
   );
