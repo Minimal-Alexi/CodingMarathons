@@ -5,6 +5,14 @@ const Recipe = ({ item,id, onDelete }) => {
         onDelete(id); // Pass the item's ID to the parent component for deletion
       };
 
+    const itemLister = (list) => 
+        {
+            const items = list.split(",");
+            return items.map((item, index) => (
+                <li key={index}>{item.trim()}</li>
+            ));
+        }
+
     return(
     <article className="Recipe-Card">
         <div className="Recipe-Info">
@@ -13,9 +21,13 @@ const Recipe = ({ item,id, onDelete }) => {
             </div>
             <div className="Preparation-Instructions">
                 <h4>Ingredients</h4>
-                <p>{item.ingredients}</p>
+                <ul>
+                    {itemLister(item.ingredients)}
+                </ul>
                 <h4>Instructions</h4>
-                <p>{item.instructions}</p>
+                <ul>
+                    {itemLister(item.instructions)}
+                </ul>
             </div>
         </div>
         <button onClick={handleDelete}>Delete Recipe</button>
