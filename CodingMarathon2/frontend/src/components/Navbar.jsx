@@ -29,6 +29,9 @@ const Navbar = () => {
                 <NavLink to='/add-job' className={linkClass}>
                   Add Job
                 </NavLink>
+                <NavLink to='/register' className={linkClass}>
+                  Register
+                </NavLink>
                 <NavLink to='/login' className={linkClass}>
                   Log In
                 </NavLink>
