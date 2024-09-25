@@ -27,17 +27,21 @@ const UserRegisterPage = ({ isAuthenticated }) => {
   const passwordInput = useField('password', password, setPassword);
   const confirmationPasswordInput = useField('password', confirmationPassword, setConfirmationPassword);
   const nameInput = useField('text', name, setName);
-  const phoneNumberInput = useField('text', phoneNumber, setPhoneNumber);
+  const phoneNumberInput = useField('number', phoneNumber, setPhoneNumber);
   const dateofBirthInput = useField('date', dateofBirth, setDateofBirth);
   const genderInput = useField('select', gender, setGender);
   const membershipStatusInput = useField('select', membershipStatus, setMembershipStatus);
 
+  const submitForm = (e) => 
+    {
+      e.preventDefault();
+    }
 
   return (
     <section className='bg-indigo-50'>
       <div className='container m-auto max-w-2xl py-24'>
         <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
-          <form onSubmit={handleSignup}>
+          <form onSubmit={submitForm} >
             <h2 className='text-3xl text-center font-semibold mb-6'>Create a new account.</h2>
 
             <div className='mb-4'>
@@ -128,6 +132,7 @@ const UserRegisterPage = ({ isAuthenticated }) => {
               <button
                 className='bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline'
                 type='submit'
+                onClick={handleSignup}
               >
                 Create Account
               </button>

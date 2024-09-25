@@ -15,7 +15,7 @@ const useSignup = (setIsAuthenticated) => {
 
     const handleSignup = async () => {
         try {
-            if (password === confirmationPassword) {
+            /* if (password === confirmationPassword) {
                 const response = await fetch("/api/users/signup", {
                     method: "POST",
                     headers: {
@@ -43,7 +43,14 @@ const useSignup = (setIsAuthenticated) => {
                 }
             } else {
                 console.log("Re-enter confirmation password");
-            }
+            } */
+            console.log(email,
+                password,
+                name,
+                phoneNumber,
+                dateofBirth,
+                gender,
+                membershipStatus,)
         } catch (error) {
             console.error("Error during signup:", error);
         }
