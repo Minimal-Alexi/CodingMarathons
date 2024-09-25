@@ -30,6 +30,7 @@ const HomeCards = () => {
               Add Job
             </Link>
           </Card>
+          
         </div>
       </div>
     </section>
