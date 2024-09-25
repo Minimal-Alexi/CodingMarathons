@@ -6,7 +6,7 @@ const {
   createJob,
   updateJob,
   deleteJob
-} = require("../controllers/jobControllers2");
+} = require("../controllers/jobControllers");
 // const auth = require("../middleware/auth");
 
 router.get("/", getAllJobs);
