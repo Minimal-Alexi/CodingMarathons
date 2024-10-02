@@ -3,7 +3,7 @@ import useSignup from "../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
 import useField from '../hooks/useField';
 
-const Signup = ({ setIsAuthenticated }) => {
+const Signup = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -45,7 +45,6 @@ const Signup = ({ setIsAuthenticated }) => {
     });
     if (!error) {
       console.log("success");
-      setIsAuthenticated(true);
       navigate("/");
     }
   };

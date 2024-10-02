@@ -3,7 +3,8 @@ import useLogin from "../hooks/useLogin";
 import useField from '../hooks/useField';
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
+
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -21,7 +22,6 @@ const Login = ({ setIsAuthenticated }) => {
         });
         if (!error) {
             console.log("success");
-            setIsAuthenticated(true);
             navigate("/");
         }
     }
