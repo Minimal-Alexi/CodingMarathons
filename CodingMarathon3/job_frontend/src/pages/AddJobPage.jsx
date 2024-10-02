@@ -7,11 +7,11 @@ const AddJobPage = () => {
   const [description, setDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
-  const [location, setlocation] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [location, setLocation] = useState("");
   const [salary, setSalary] = useState("");
   const [postedDate, setPostedDate] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("open");
 
   const navigate = useNavigate();
  
@@ -102,30 +102,32 @@ const AddJobPage = () => {
           value={contactPhone}
           onChange={(e) => setContactPhone(e.target.value)}
         />
-        <div>
-          <label>Salary</label>
+        <label>Location:</label>
           <input
             type="text"
+            required
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          <label>Salary:</label>
+          <input
+            type="number"
+            required
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Posted Date</label>
+          <label>Posted Date:</label>
           <input
             type="date"
+            required
             value={postedDate}
             onChange={(e) => setPostedDate(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Status</label>
-          <input
-            type="text"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          />
-        </div>
+        <label>Status:</label>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="open">Open</option>
+          <option value="close">Close</option>
+        </select>
         <button>Add Job</button>
       </form>
     </div>

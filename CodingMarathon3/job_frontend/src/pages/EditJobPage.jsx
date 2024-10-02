@@ -13,7 +13,11 @@ const EditJobPage = () => {
   const [description, setDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [location, setLocation] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [salary, setSalary] = useState("");
+  const [postedDate, setPostedDate] = useState("");
+  const [status, setStatus] = useState("");
 
   const navigate = useNavigate();
 
@@ -52,6 +56,10 @@ const EditJobPage = () => {
         setCompanyName(data.company.name);
         setContactEmail(data.company.contactEmail);
         setContactPhone(data.company.contactPhone);
+        setLocation(data.location);
+        setSalary(data.salary);
+        setPostedDate(data.postedDate);
+        setStatus(data.description);
       } catch (error) {
         console.error("Failed to fetch job:", error);
         setError(error.message);
@@ -77,6 +85,10 @@ const EditJobPage = () => {
         contactEmail,
         contactPhone,
       },
+      location,
+      salary,
+      postedDate,
+      status
     };
 
     const success = await updateJob(updatedJob);
@@ -139,6 +151,32 @@ const EditJobPage = () => {
             value={contactPhone}
             onChange={(e) => setContactPhone(e.target.value)}
           />
+          <label>Location:</label>
+          <input
+            type="text"
+            required
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          <label>Salary:</label>
+          <input
+            type="number"
+            required
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+          />
+          <label>Posted Date:</label>
+          <input
+            type="date"
+            required
+            value={postedDate}
+            onChange={(e) => setPostedDate(e.target.value)}
+          />
+        <label>Status:</label>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="open">Open</option>
+          <option value="close">Close</option>
+        </select>
           <button>Update Job</button>
         </form>
       )}
