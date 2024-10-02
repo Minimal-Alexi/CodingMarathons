@@ -1,29 +1,40 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../contexts/authContext";
 
 export default function useLogin(url) {
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
-    const login = async (object) => {
-        setIsLoading(true);
-        setError(null);
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(object),
-        });
-        const user = await response.json();
-    
-        if (!response.ok) {
-          setError(user.error);
-          setIsLoading(false);
-          return error;
-        }
-    
-        // localStorage.setItem("token", user.token);
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log(localStorage.getItem("user"));
-        setIsLoading(false);
-      };
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Get login function from AuthContext
+  const { login: authLogin } = useContext(AuthContext);
 
-      return { login, isLoading, error };
+  const login = async (object) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(object),
+      });
+      const user = await response.json();
+
+      if (!response.ok) {
+        setError(user.error);
+        setIsLoading(false);
+        return;
+      }
+
+      // Use the login method from AuthContext to save the JWT token
+      authLogin(user.token);
+
+      setIsLoading(false);
+    } catch (err) {
+      setError("Something went wrong");
+      setIsLoading(false);
+    }
+  };
+
+  return { login, isLoading, error };
 }

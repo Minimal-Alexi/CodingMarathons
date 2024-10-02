@@ -3,7 +3,7 @@ import { useState } from "react";
 
 // contexts
 import { JobProvider } from "./contexts/jobContext";
-
+import { AuthProvider } from "./contexts/authContext";
 
 // pages & components
 import Home from "./pages/HomePage";
@@ -16,26 +16,27 @@ import SignUp from "./pages/Signup";
 import LogIn from "./pages/Login";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <div className="App">
-      <JobProvider>
-        <BrowserRouter>
-          <Navbar isAuthenticated={isAuthenticated} />
-          <div className="content">
-            <Routes>
-              <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
-              <Route path="/login" element={<LogIn setIsAuthenticated={setIsAuthenticated} />} />
-              <Route path="/" element={<Home isAuthenticated={isAuthenticated}/>} />
-              <Route path="/:id" element={<JobPage />} />
-              <Route path="/edit-job/:id" element={<EditJobPage />} />
-              <Route path="/add-job" element={<AddJobPage />} />
-              <Route path='*' element={<NotFoundPage />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </JobProvider>
+      <AuthProvider>
+        <JobProvider>
+          <BrowserRouter>
+            <Navbar/>
+            <div className="content">
+              <Routes>
+                <Route path="/signup" element={<SignUp/>} />
+                <Route path="/login" element={<LogIn/>} />
+                <Route path="/" element={<Home/>} />
+                <Route path="/:id" element={<JobPage />} />
+                <Route path="/edit-job/:id" element={<EditJobPage />} />
+                <Route path="/add-job" element={<AddJobPage />} />
+                <Route path='*' element={<NotFoundPage />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </JobProvider>
+      </AuthProvider>
     </div>
   );
 }

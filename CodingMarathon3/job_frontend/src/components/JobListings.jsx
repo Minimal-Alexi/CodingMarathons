@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import JobListing from "./JobListing";
 import { jobContext } from "../contexts/jobContext";
+import { AuthContext } from "../contexts/authContext";
 
-const JobListings = ({isAuthenticated}) => {
-
+const JobListings = () => {
+  const {isAuthenticated} = useContext(AuthContext)
   const { jobs ,handleDelete } = useContext(jobContext);
 
   return (
