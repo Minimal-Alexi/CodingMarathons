@@ -21,6 +21,10 @@ const JobListing = ({ job, handleDelete, isAuthenticated }) => {
         <p>Company: {job.company.name}</p>
         <p>Company email: {job.company.contactEmail}</p>
         <p>Company phone: {job.company.contactPhone}</p>
+        <p>Location: {job.location}</p>
+        <p>Salary: {job.salary} $</p>
+        <p>Posted on: {job.postedDate}</p>
+        <p>Status: {job.status}</p>
       </div>
       <div>
         {isAuthenticated ? (
