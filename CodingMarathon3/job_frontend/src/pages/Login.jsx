@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 const Login = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const emailField = useField("text", email, setEmail);
+    const usernameField = useField("text", username, setUsername);
     const passwordField = useField("password", password, setPassword);
 
     const { login, error } = useLogin("/api/users/login")
@@ -16,7 +16,7 @@ const Login = ({ setIsAuthenticated }) => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         await login({
-            email: email,
+            username: username,
             password: password,
         });
         if (!error) {
@@ -30,8 +30,8 @@ const Login = ({ setIsAuthenticated }) => {
         <div className="login">
             <h2>Log in</h2>
             <form onSubmit={handleFormSubmit}>
-                <label>Email address:</label>
-                <input {...emailField} />
+                <label>username:</label>
+                <input {...usernameField} />
                 <label>Password:</label>
                 <input {...passwordField} />
                 <button>Log in</button>

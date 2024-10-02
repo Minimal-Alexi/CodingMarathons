@@ -4,8 +4,13 @@ const mongoose = require("mongoose");
 // GET /jobs
 const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find({}).sort({ createdAt: -1 });
-    if (jobs) {
+    const limit = parseInt(req.query._limit);
+
+    const jobs = limit
+      ? await Job.find({}).sort({ createdAt: -1 }).limit(limit)
+      : await Job.find({}).sort({createdAt: -1});
+
+    if (jobs && jobs.length > 0) {
       res.status(200).json(jobs);
     } else {
       res.status(404).json({ message: "No jobs found" });
@@ -32,7 +37,7 @@ const createJob = async (req, res) => {
 
 // GET /jobs/:jobId
 const getJobById = async (req, res) => {
-  const {jobId} = req.params;
+  const { jobId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     return res.status(400).json({ message: "Invalid job ID" });
@@ -52,17 +57,17 @@ const getJobById = async (req, res) => {
 
 // PUT /jobs/:jobId
 const updateJob = async (req, res) => {
-  const {jobId} = req.params;
+  const { jobId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     return res.status(400).json({ message: "Invalid job ID" });
   }
   try {
     const updatedJob = await Job.findOneAndUpdate(
-      {_id: jobId},
-      { ...req.body }, 
-      {new: true, overwrite: true}
-      ); // Spread the req.body object
-  
+      { _id: jobId },
+      { ...req.body },
+      { new: true, overwrite: true }
+    ); // Spread the req.body object
+
     if (updatedJob) {
       res.status(200).json(updatedJob);
     } else {
@@ -72,18 +77,18 @@ const updateJob = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Server error, failed to update job" });
-   }
+  }
 
 };
 
 // DELETE /jobs/:jobId
 const deleteJob = async (req, res) => {
-  const {jobId} = req.params;
+  const { jobId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(jobId)) {
     return res.status(400).json({ message: "Invalid job ID" });
   }
-  
-  const isDeleted = await Job.findOneAndDelete({_id: jobId});
+
+  const isDeleted = await Job.findOneAndDelete({ _id: jobId });
 
   try {
     if (isDeleted) {
