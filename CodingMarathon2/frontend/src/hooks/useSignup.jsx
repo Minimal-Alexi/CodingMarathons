@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const useSignup = (setIsAuthenticated) => {
+const useSignup = ({setIsAuthenticated}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmationPassword, setConfirmationPassword] = useState('');
