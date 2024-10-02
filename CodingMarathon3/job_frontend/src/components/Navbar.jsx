@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/authContext";
 
 const Navbar = () => {
-  const {isAuthenticated} = useContext(AuthContext)
+  const {isAuthenticated,logout} = useContext(AuthContext)
   return (
     <nav className="navbar">
       <h1>Job Search</h1>
@@ -12,6 +12,7 @@ const Navbar = () => {
         {isAuthenticated ? (
           <>
             <Link to={`/add-job`}>Add job</Link>
+            <Link to={`/` } onClick={logout}>Logout</Link>
           </>
         ) : (
           <>
