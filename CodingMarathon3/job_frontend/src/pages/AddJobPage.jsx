@@ -7,7 +7,11 @@ const AddJobPage = () => {
   const [description, setDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [location, setlocation] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [salary, setSalary] = useState("");
+  const [postedDate, setPostedDate] = useState("");
+  const [status, setStatus] = useState("");
 
   const navigate = useNavigate();
  
@@ -42,6 +46,10 @@ const AddJobPage = () => {
         contactEmail,
         contactPhone,
       },
+      location,
+      salary,
+      postedDate,
+      status
     };
 
     addJob(newJob);
@@ -94,6 +102,30 @@ const AddJobPage = () => {
           value={contactPhone}
           onChange={(e) => setContactPhone(e.target.value)}
         />
+        <div>
+          <label>Salary</label>
+          <input
+            type="text"
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Posted Date</label>
+          <input
+            type="date"
+            value={postedDate}
+            onChange={(e) => setPostedDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Status</label>
+          <input
+            type="text"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          />
+        </div>
         <button>Add Job</button>
       </form>
     </div>
