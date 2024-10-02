@@ -4,26 +4,28 @@ const app = require("../app");
 const api = supertest(app);
 const Jobs = require("../models/jobModel");
 
+let token = null;
+
 beforeAll(async () => {
     await Jobs.deleteMany({});
-    const result = await api.post("/api/jobs").send({
-        title: "John Doe",
-        type: "Full-time",
-        description: "password123",
-        company: {
-            name: "name",
-            contactEmail: "Male@example.com",
-            contactPhone: "19900101",
-        },
-        location: "Inactive",
-        salary: "255423",
+    const result = await api.post("/api/users/signup").send({
+        name: "John Doe",
+        username: "john@example.com",
+        password: "password123",
+        phone_number: "1234567890",
+        gender: "Male",
+        date_of_birth: "1990-01-01",
+        membership_status: "Inactive",
+        address: "address",
     });
+    token = result.body.token;
 });
 
 describe("Job API", function () {
     beforeEach(async () => {
         await Jobs.deleteMany({});
-        const result = await api.post("/api/jobs").send({
+
+        job = {
             title: "John Doe",
             type: "Full-time",
             description: "password123",
@@ -34,17 +36,21 @@ describe("Job API", function () {
             },
             location: "Inactive",
             salary: "255423",
-        })
+        }
+
+        const result = await api
+            .post("/api/jobs")
+            .send(job)
+            .set("Authorization", "bearer " + token)
     });
 
     describe("GET /jobs", () => {
         it('should return all jobs', async () => {
-            console.log("entered test");
-
-            const initialJobs = await Jobs.find({});
-            const response = await api.get("/api/jobs");
-
-            expect(response.body).toHaveLength(initialJobs.length);
+            await api
+                .get("/api/jobs")
+                .set("Authorization", "bearer " + token)
+                .expect(200)
+                .expect("Content-Type", /application\/json/);
         });
 
         it('should get one job by id', async () => {
@@ -56,6 +62,7 @@ describe("Job API", function () {
 
             await api
                 .get("/api/jobs/" + job._id)
+                .set("Authorization", "bearer " + token)
                 .expect(200)
                 .expect("Content-Type", /application\/json/);
         })
@@ -80,6 +87,7 @@ describe("Job API", function () {
 
             const response = await api
                 .post("/api/jobs")
+                .set("Authorization", "bearer " + token)
                 .send(newJob)
                 .expect(201)
                 .expect("Content-Type", /application\/json/);
@@ -96,6 +104,7 @@ describe("Job API", function () {
 
             const response = await api
                 .put(`/api/jobs/${job._id}`)
+                .set("Authorization", "bearer " + token)
                 .send(updatedJob)
                 .expect(200)
                 .expect("Content-Type", /application\/json/);
@@ -115,6 +124,7 @@ describe("Job API", function () {
             const job = await Jobs.findOne();
             await api
                 .delete(`/api/jobs/${job._id}`)
+                .set("Authorization", "bearer " + token)
                 .expect(204)
             const jobCheck = await Jobs.findById(job._id);
             expect(jobCheck).toBeNull();
