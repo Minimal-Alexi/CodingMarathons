@@ -9,6 +9,9 @@ const AddJobPage = () => {
   const [name, setName] = useState('');
   const [companyEmail, setCompanyEmail] = useState('');
   const [companyPhone, setCompanyPhone] = useState('');
+  const [location,setLocation] = useState('');
+  const [jobSalary,setSalary] = useState('');
+  const [status,setStatus] = useState('');
 
   const titleField = useField('text', title, setTitle);
   const typeField = useField('select', type, setType);
@@ -16,15 +19,23 @@ const AddJobPage = () => {
   const nameField = useField('text', name, setName);
   const companyEmailField = useField('text', companyEmail, setCompanyEmail);
   const companyPhoneField = useField('text', companyPhone, setCompanyPhone);
+  const locationField = useField('text',location,setLocation);
+  const jobSalaryField = useField('number',jobSalary,setSalary);
+  const statusField = useField('select',status,setStatus);
   
   const submitForm = async (e) => {
     e.preventDefault();
     console.log("submitForm called");
 
-    if (!title || !type || !description || !name || !companyEmail || !companyPhone) {
+    if (!title || !type || !description || !name || !companyEmail || !companyPhone || !location || !jobSalary || !statusField) {
       console.log('Fill all the fields');
       return;
     }
+    if(jobSalary < 0 )
+      {
+        console.log("Salary cant be smaller than 0");
+        return;
+      }
 
     const company = 
     {
@@ -38,6 +49,10 @@ const AddJobPage = () => {
       type,
       description,
       company,
+      location,
+      jobSalary,
+      postedDate : new Date,
+      status
     }
    
 
@@ -62,6 +77,9 @@ const AddJobPage = () => {
       setName('');
       setCompanyEmail('');
       setCompanyPhone('');
+      setLocation('');
+      setStatus('');
+      setSalary('');
     }
     console.log(response);
   };
@@ -105,6 +123,22 @@ const AddJobPage = () => {
           {...companyPhoneField}
           required
         />
+        <label>Address:</label>
+        <input
+          {...locationField}
+          required
+        />
+        <label>Salary:</label>
+        <input
+          {...jobSalaryField}
+          required
+        />
+        <label>Status:</label>
+        <select {...statusField} required>
+          <option value="" defaultValue>Select availability status</option>
+          <option value="open">Open</option>
+          <option value="closed">Unavailable</option>
+        </select>
         <button>Add Job</button>
       </form>
     </div>
