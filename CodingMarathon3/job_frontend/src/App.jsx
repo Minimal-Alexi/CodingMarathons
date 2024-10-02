@@ -25,14 +25,14 @@ const App = () => {
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/jobs/:id" element={<JobPage isAuthenticated={isAuthenticated} />} />
+            <Route path="/jobs/:id" element={<JobPage/>} />
             <Route
               path="/jobs/add-job"
-              element={isAuthenticated ? <AddJobPage /> : <Navigate to="/signup" />}
+              element={<AddJobPage />}
             />           
             <Route
               path="/edit-job/:id"
-              element={isAuthenticated ? <EditJobPage /> : <Navigate to="/signup" />}
+              element={<EditJobPage />}
             />
             <Route
               path="/signup"
