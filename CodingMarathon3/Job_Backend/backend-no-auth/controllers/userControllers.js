@@ -1,96 +1,115 @@
 const User = require("../models/userModel");
-const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-//GET / users;
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({}).sort({ createdAt: -1 });
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve users" });
-  }
+// Generate JWT
+const generateToken = (_id) => {
+  return jwt.sign({ _id }, process.env.SECRET, {
+    expiresIn: "3d",
+  });
 };
 
-// POST /users
-const createUser = async (req, res) => {
+// @desc    Register new user
+// @route   POST /api/users/signup
+// @access  Public
+const signupUser = async (req, res) => {
+  const {
+    name,
+    username,
+    password,
+    phone_number,
+    gender,
+    date_of_birth,
+    membership_status,
+    address,
+    profile_picture,
+  } = req.body;
   try {
-    const newUser = await User.create({ ...req.body });
-    res.status(201).json(newUser);
-  } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Failed to create user", error: error.message });
-  }
-};
+    if (
+      !name ||
+      !username ||
+      !password ||
+      !phone_number ||
+      !gender ||
+      !date_of_birth ||
+      !membership_status ||
+      !address ||
+      !profile_picture
+    ) {
+      res.status(400);
+      throw new Error("Please add all fields");
+    }
+    // Check if user exists
+    const userExists = await User.findOne({ username });
 
-// GET /users/:userId
-const getUserById = async (req, res) => {
-  const { userId } = req.params;
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  try {
-    const user = await User.findById(userId);
+    // Create user
+    const user = await User.create({
+      name,
+      username,
+      password: hashedPassword,
+      phone_number,
+      gender,
+      date_of_birth,
+      membership_status,
+      address,
+      profile_picture,
+    });
+
     if (user) {
-      res.status(200).json(user);
+      // console.log(user._id);
+      const token = generateToken(user._id);
+      res.status(201).json({ username, token });
     } else {
-      res.status(404).json({ message: "user not found" });
+      res.status(400);
+      throw new Error("Invalid user data");
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve user" });
+    res.status(400).json({ error: error.message });
   }
 };
 
-// PUT /user/:userId
-const updateUser = async (req, res) => {
-  const { userId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
-
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
   try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      { ...req.body },
-      { new: true }
-    );
-    if (updatedUser) {
-      res.status(200).json(updatedUser);
+    // Check for user username
+    const user = await User.findOne({ username });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = generateToken(user._id);
+      res.status(200).json({ username, token });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(400);
+      throw new Error("Invalid credentials");
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to update User" });
+    res.status(400).json({ error: error.message });
   }
 };
 
-// DELETE /users/:userId
-const deleteUser = async (req, res) => {
-  const { userId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
-
-  try {
-    const deletedUser = await User.findOneAndDelete({ _id: userId });
-    if (deletedUser) {
-      res.status(204).send(); // 204 No Content
-    } else {
-      res.status(404).json({ message: "user not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Failed to delete user" });
-  }
-};
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+// const getMe = async (req, res) => {
+//   try {
+//     res.status(200).json(req.user);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
 module.exports = {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
+  signupUser,
+  loginUser
 };
