@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/authContext";
 
-const Navbar = ({ isAuthenticated }) => {
+const Navbar = () => {
+  const {isAuthenticated} = useContext(AuthContext)
   return (
     <nav className="navbar">
       <h1>Job Search</h1>
