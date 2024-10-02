@@ -8,15 +8,10 @@ const jobSchema = new mongoose.Schema({
     name: { type: String, required: true },
     contactEmail: { type: String, required: true },
     contactPhone: { type: String, required: true }
-  },
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
+  }
 });
 
- 
+
 //add  virtual field id
 jobSchema.set('toJSON', {
   virtuals: true,
