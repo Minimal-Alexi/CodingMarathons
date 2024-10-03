@@ -1,18 +1,19 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import JobListing from "./JobListing";
+import { jobContext } from "../contexts/jobContext";
+import { AuthContext } from "../contexts/authContext";
 
-const JobListings = ({ jobs }) => {
+const JobListings = () => {
+  const {isAuthenticated} = useContext(AuthContext)
+  const { jobs ,handleDelete } = useContext(jobContext);
+
   return (
     <div className="job-list">
-      {jobs.map((job) => (
-
-        <div className="job-preview" key={job.id}>
-          <Link to={`/jobs/${job.id}`}>
-            <h2>{job.title}</h2>
-          </Link>
-          <p>Type: {job.type}</p>
-          <p>Company: {job.company.name}</p>
-        </div>
-      ))}
+      {jobs.map((job) => {
+        return (
+          <JobListing key={job._id} job={job} handleDelete={handleDelete} isAuthenticated= {isAuthenticated}/>
+        )
+      })}
     </div>
   );
 };

@@ -71,7 +71,21 @@
 .job-preview p span {
   font-weight: bold;
 }
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+.navbar a:hover {
+  color: #f1356d;
+}
+.content {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
 
+/* job previews / list */
 .job-preview a {
   text-decoration: none;
 }
@@ -119,6 +133,7 @@
   box-sizing: border-box;
   display: block;
 }
+
 .create button {
   background: #f1356d;
   color: #fff;
@@ -159,4 +174,3 @@ nav .links button {
   border-radius: 5px; /* Optional: Adds rounded corners */
   border-radius: 5px;
 } 
-

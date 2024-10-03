@@ -1,34 +1,28 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/authContext";
 
-const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
-  const handleClick = (e) => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("user");
-  };
-
+const Navbar = () => {
+  const {isAuthenticated,logout} = useContext(AuthContext)
   return (
     <nav className="navbar">
-      <Link to="/">
-        <h1>React Jobs</h1>
-      </Link>
+      <h1>Job Search</h1>
       <div className="links">
-        {isAuthenticated && (
-          <div>
-            <Link to="/jobs/add-job">Add Job</Link>
-            <span>{JSON.parse(localStorage.getItem("user")).username}</span>
-            <button onClick={handleClick}>Log out</button>
-          </div>
-        )}
-        {!isAuthenticated && (
-          <div>
-            <Link to="/jobs/add-job">Add Job</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
-          </div>
+        <Link to={`/`}>Home</Link>
+        {isAuthenticated ? (
+          <>
+            <Link to={`/add-job`}>Add job</Link>
+            <Link to={`/` } onClick={logout}>Logout</Link>
+          </>
+        ) : (
+          <>
+            <Link to={`/signup`}>Sign up</Link>
+            <Link to={`/login`}>Log in</Link>
+          </>
         )}
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;

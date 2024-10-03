@@ -1,65 +1,43 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
+// contexts
+import { JobProvider } from "./contexts/jobContext";
+import { AuthProvider } from "./contexts/authContext";
+
 // pages & components
-import Navbar from "./components/Navbar";
 import Home from "./pages/HomePage";
 import AddJobPage from "./pages/AddJobPage";
+import Navbar from "./components/Navbar";
+import NotFoundPage from "./pages/NotFoundPage";
 import JobPage from "./pages/JobPage";
 import EditJobPage from "./pages/EditJobPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import SignUp from "./pages/Signup";
+import LogIn from "./pages/Login";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user && user.token ? true : false;
-  });
-  
 
   return (
     <div className="App">
-      <BrowserRouter>
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jobs/:id" element={<JobPage/>} />
-            <Route
-              path="/jobs/add-job"
-              element={<AddJobPage />}
-            />           
-            <Route
-              path="/edit-job/:id"
-              element={<EditJobPage />}
-            />
-            <Route
-              path="/signup"
-              element={
-                isAuthenticated ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Signup setIsAuthenticated={setIsAuthenticated} />
-                )
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Login setIsAuthenticated={setIsAuthenticated} />
-                )
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <AuthProvider>
+        <JobProvider>
+          <BrowserRouter>
+            <Navbar/>
+            <div className="content">
+              <Routes>
+                <Route path="/signup" element={<SignUp/>} />
+                <Route path="/login" element={<LogIn/>} />
+                <Route path="/" element={<Home/>} />
+                <Route path="/:id" element={<JobPage />} />
+                <Route path="/edit-job/:id" element={<EditJobPage />} />
+                <Route path="/add-job" element={<AddJobPage />} />
+                <Route path='*' element={<NotFoundPage />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </JobProvider>
+      </AuthProvider>
     </div>
   );
-};
-
+}
 export default App;

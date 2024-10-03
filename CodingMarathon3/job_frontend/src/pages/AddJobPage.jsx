@@ -1,59 +1,87 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import useField from '../hooks/useField';
 
 const AddJobPage = () => {
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("Full-Time");
-  const [description, setDescription] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [location, setLocation] = useState("");
-  const [salary, setSalary] = useState("");
-  const [postedDate, setPostedDate] = useState("");
-  const [status, setStatus] = useState("open");
 
-  const navigate = useNavigate();
- 
-  const addJob = async (newJob) => {
-    try {
-      const res = await fetch("/api/jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newJob),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to add job");
-      }
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-    return true;
-  };
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
+  const [name, setName] = useState('');
+  const [companyEmail, setCompanyEmail] = useState('');
+  const [companyPhone, setCompanyPhone] = useState('');
+  const [location,setLocation] = useState('');
+  const [jobSalary,setSalary] = useState('');
+  const [status,setStatus] = useState('');
 
-  const submitForm = (e) => {
+  const titleField = useField('text', title, setTitle);
+  const typeField = useField('select', type, setType);
+  const descriptionField = useField('text', description, setDescription);
+  const nameField = useField('text', name, setName);
+  const companyEmailField = useField('text', companyEmail, setCompanyEmail);
+  const companyPhoneField = useField('text', companyPhone, setCompanyPhone);
+  const locationField = useField('text',location,setLocation);
+  const jobSalaryField = useField('number',jobSalary,setSalary);
+  const statusField = useField('select',status,setStatus);
+  
+  const submitForm = async (e) => {
     e.preventDefault();
+    console.log("submitForm called");
 
-    const newJob = {
+    if (!title || !type || !description || !name || !companyEmail || !companyPhone || !location || !jobSalary || !statusField) {
+      console.log('Fill all the fields');
+      return;
+    }
+    if(jobSalary < 0 )
+      {
+        console.log("Salary cant be smaller than 0");
+        return;
+      }
+
+    const company = 
+    {
+      name,
+      contactEmail : companyEmail,
+      contactPhone : companyPhone,
+    }
+
+    const job = {
       title,
       type,
       description,
-      company: {
-        name: companyName,
-        contactEmail,
-        contactPhone,
-      },
+      company,
       location,
-      salary,
-      postedDate,
+      jobSalary,
+      postedDate : new Date,
       status
-    };
+    }
+   
 
-    addJob(newJob);
-    return navigate("/");
+    const credentials = JSON.parse(localStorage.getItem("user"));
+    const jwt = credentials.token;
+    
+    const response = await fetch('/api/jobs', {
+      method: 'POST',
+      body: JSON.stringify(job),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      },
+    });
+
+    if (!response.ok) {
+      console.log('Error while creating job')
+    } else {
+      setTitle('');
+      setType('');
+      setDescription('');
+      setName('');
+      setCompanyEmail('');
+      setCompanyPhone('');
+      setLocation('');
+      setStatus('');
+      setSalary('');
+    }
+    console.log(response);
   };
 
   return (
@@ -62,13 +90,12 @@ const AddJobPage = () => {
       <form onSubmit={submitForm}>
         <label>Job title:</label>
         <input
-          type="text"
+          {...titleField}
           required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
         />
         <label>Job type:</label>
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <select {...typeField} required>
+          <option value="" defaultValue>Select job type</option>
           <option value="Full-Time">Full-Time</option>
           <option value="Part-Time">Part-Time</option>
           <option value="Remote">Remote</option>
@@ -77,56 +104,40 @@ const AddJobPage = () => {
 
         <label>Job Description:</label>
         <textarea
+          {...descriptionField}
           required
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+
         ></textarea>
         <label>Company Name:</label>
         <input
-          type="text"
+          {...nameField}
           required
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
         />
         <label>Contact Email:</label>
         <input
-          type="text"
+          {...companyEmailField}
           required
-          value={contactEmail}
-          onChange={(e) => setContactEmail(e.target.value)}
         />
         <label>Contact Phone:</label>
         <input
-          type="text"
+          {...companyPhoneField}
           required
-          value={contactPhone}
-          onChange={(e) => setContactPhone(e.target.value)}
         />
-        <label>Location:</label>
-          <input
-            type="text"
-            required
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <label>Salary:</label>
-          <input
-            type="number"
-            required
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-          />
-          <label>Posted Date:</label>
-          <input
-            type="date"
-            required
-            value={postedDate}
-            onChange={(e) => setPostedDate(e.target.value)}
-          />
+        <label>Address:</label>
+        <input
+          {...locationField}
+          required
+        />
+        <label>Salary:</label>
+        <input
+          {...jobSalaryField}
+          required
+        />
         <label>Status:</label>
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <select {...statusField} required>
+          <option value="" defaultValue>Select availability status</option>
           <option value="open">Open</option>
-          <option value="close">Close</option>
+          <option value="closed">Unavailable</option>
         </select>
         <button>Add Job</button>
       </form>
