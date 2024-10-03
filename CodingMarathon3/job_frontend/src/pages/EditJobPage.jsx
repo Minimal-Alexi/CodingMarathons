@@ -47,8 +47,7 @@ const EditJobPage = () => {
       company,
     }
    
-    const credentials = JSON.parse(localStorage.getItem("user"));
-    const jwt = credentials.token;
+    const jwt = localStorage.getItem("jwt");
 
     const response = await fetch(`/api/jobs/${id}`, {
       method: 'PUT',

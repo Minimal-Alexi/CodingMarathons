@@ -10,7 +10,7 @@ const AddJobPage = () => {
   const [companyEmail, setCompanyEmail] = useState('');
   const [companyPhone, setCompanyPhone] = useState('');
   const [location,setLocation] = useState('');
-  const [jobSalary,setSalary] = useState('');
+  const [salary,setSalary] = useState('');
   const [status,setStatus] = useState('');
 
   const titleField = useField('text', title, setTitle);
@@ -20,18 +20,18 @@ const AddJobPage = () => {
   const companyEmailField = useField('text', companyEmail, setCompanyEmail);
   const companyPhoneField = useField('text', companyPhone, setCompanyPhone);
   const locationField = useField('text',location,setLocation);
-  const jobSalaryField = useField('number',jobSalary,setSalary);
+  const jobSalaryField = useField('number',salary,setSalary);
   const statusField = useField('select',status,setStatus);
   
   const submitForm = async (e) => {
     e.preventDefault();
     console.log("submitForm called");
 
-    if (!title || !type || !description || !name || !companyEmail || !companyPhone || !location || !jobSalary || !statusField) {
+    if (!title || !type || !description || !name || !companyEmail || !companyPhone || !location || !salary || !statusField) {
       console.log('Fill all the fields');
       return;
     }
-    if(jobSalary < 0 )
+    if(salary < 0 )
       {
         console.log("Salary cant be smaller than 0");
         return;
@@ -50,14 +50,13 @@ const AddJobPage = () => {
       description,
       company,
       location,
-      jobSalary,
+      salary,
       postedDate : new Date,
       status
     }
    
 
-    const credentials = JSON.parse(localStorage.getItem("user"));
-    const jwt = credentials.token;
+    const jwt = localStorage.getItem("jwt");
     
     const response = await fetch('/api/jobs', {
       method: 'POST',
