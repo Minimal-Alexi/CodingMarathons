@@ -26,8 +26,6 @@ const Signup = () => {
   const addressField = useField("address", address, setAddress);
   const profilePictureField = useField("text", profilePicture, setProfilePicture);
 
-
-
   const { signup, error } = useSignup("/api/users/signup");
 
   const handleFormSubmit = async (e) => {
@@ -78,3 +76,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

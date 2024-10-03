@@ -10,8 +10,7 @@ export default function useSignup(url) {
 
   const signup = async (object) => {
     setIsLoading(true);
-    setError(null);
-    
+    setError(null); 
     try {
       const response = await fetch(url, {
         method: "POST",
