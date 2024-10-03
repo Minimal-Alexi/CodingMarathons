@@ -51,8 +51,7 @@ export const JobProvider  = ({ children }) => {
     const handleDelete = async (_id) => {
         try
         {
-          const credentials = JSON.parse(localStorage.getItem("user"));
-          const jwt = credentials.token;
+          const jwt = localStorage.getItem("jwt");
           const response = await fetch(`/api/jobs/${_id}`,
             {
               method: 'DELETE',
