@@ -16,6 +16,10 @@ const EditJobPage = () => {
   const [name, setName] = useState('');
   const [companyEmail, setCompanyEmail] = useState('');
   const [companyPhone, setCompanyPhone] = useState('');
+  const [location,setLocation] = useState('');
+  const [salary,setSalary] = useState('');
+  const [status,setStatus] = useState('');
+
 
   const titleField = useField('text', title, setTitle);
   const typeField = useField('select', type, setType);
@@ -23,15 +27,24 @@ const EditJobPage = () => {
   const nameField = useField('text', name, setName);
   const companyEmailField = useField('text', companyEmail, setCompanyEmail);
   const companyPhoneField = useField('text', companyPhone, setCompanyPhone);
+  const locationField = useField('text',location,setLocation);
+  const jobSalaryField = useField('number',salary,setSalary);
+  const statusField = useField('select',status,setStatus);
   
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log("submitForm called");
 
-    if (!title || !type || !description || !name || !companyEmail || !companyPhone) {
+    console.log("submitForm called");
+    if (!title || !type || !description || !name || !companyEmail || !companyPhone || !location || !salary || !statusField) {
       console.log('Fill all the fields');
       return;
     }
+    if(salary < 0 )
+      {
+        console.log("Salary cant be smaller than 0");
+        return;
+      }
+
 
     const company = 
     {
@@ -45,6 +58,10 @@ const EditJobPage = () => {
       type,
       description,
       company,
+      location,
+      salary,
+      postedDate : new Date,
+      status
     }
    
     const jwt = localStorage.getItem("jwt");
@@ -59,7 +76,7 @@ const EditJobPage = () => {
     });
 
     if (!response.ok) {
-      console.log('Error while creating job')
+      console.log('Error while editing job')
     } else {
       setTitle('');
       setType('');
@@ -67,6 +84,9 @@ const EditJobPage = () => {
       setName('');
       setCompanyEmail('');
       setCompanyPhone('');
+      setLocation('');
+      setStatus('');
+      setSalary('');
     }
     console.log(response);
   };
@@ -88,6 +108,9 @@ const EditJobPage = () => {
           setName(job.company.name);
           setCompanyEmail(job.company.contactEmail);
           setCompanyPhone(job.company.contactPhone);
+          setLocation(job.location);
+          setStatus(job.status);
+          setSalary(job.salary);
         }
     },[id,loading]);
 
@@ -134,6 +157,22 @@ const EditJobPage = () => {
           {...companyPhoneField}
           required
         />
+        <label>Address:</label>
+        <input
+          {...locationField}
+          required
+        />
+        <label>Salary:</label>
+        <input
+          {...jobSalaryField}
+          required
+        />
+        <label>Status:</label>
+        <select {...statusField} required>
+          <option value="" defaultValue>Select availability status</option>
+          <option value="open">Open</option>
+          <option value="closed">Unavailable</option>
+        </select>
         <button>Edit Job</button>
       </form>
     </div>
