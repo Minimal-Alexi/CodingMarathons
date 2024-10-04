@@ -23,7 +23,7 @@ export const JobProvider  = ({ children }) => {
       }
       catch (error) {
         console.error(error);
-        console.error('Failed to fetch products');
+        console.error('Failed to fetch jobs');
       }
     }
 
@@ -38,12 +38,12 @@ export const JobProvider  = ({ children }) => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log("Succesfully found product.")
+                console.log("Succesfully found job.")
                 return data;
             }
         } catch (error) {
             console.error(error);
-            console.error('Failed to fetch product')
+            console.error('Failed to fetch job')
             return false;
         }
     }
@@ -63,11 +63,11 @@ export const JobProvider  = ({ children }) => {
             if(response.ok)
               {
                 jobFetching();
-                console.log("Succesfully deleted product.");
+                console.log("Succesfully deleted job.");
               }
         }catch (error) {
           console.error(error);
-          console.error('Failed to delete product');
+          console.error('Failed to delete job');
         }
       }
 
