@@ -797,6 +797,8 @@ app.use(errorHandler);
 
 # Thien Luu
 
+## frontend for no-auth
+
 ### With the new schemas for users and jobs. My part was to create the deployment of the app with out authentication. Since we want to keep the user login and signup functions, we just edit the code so that no user account is needed to add, edit and delete jobs.
 
 ```js
@@ -1014,7 +1016,7 @@ export default function useSignup(url) {
   return { signup, isLoading, error };
 }
 ```
-ChatGPT assessemt:
+ChatGPT assessent:
 
 useField Hook
 Strengths: Simple and reusable for managing input fields.
