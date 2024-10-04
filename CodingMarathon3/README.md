@@ -324,7 +324,145 @@ Isolation:
 
 Realistic Data: Test data provided (e.g., usernames, passwords) appears realistic and follows typical patterns for a signup process.
 
+# Thien Luu
 
+### With the new schemas for users and jobs. My part was to create the deployment of the app with out authentication. Since we want to keep the user login and signup functions, we just edit the code so that no user account is needed to add, edit and delete jobs.
+
+```js
+// app.js
+const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user && user.token ? true : false;
+  });
+  
+
+  return (
+    <div className="App">
+      <BrowserRouter>
+      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/jobs/:id" element={<JobPage/>} />
+            <Route
+              path="/jobs/add-job"
+              element={<AddJobPage />}
+            />           
+            <Route
+              path="/edit-job/:id"
+              element={<EditJobPage />}
+            />
+            <Route
+              path="/signup"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Signup setIsAuthenticated={setIsAuthenticated} />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Login setIsAuthenticated={setIsAuthenticated} />
+                )
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default App;
+```
+ChatGPT assessment:
+Strengths:
+Clear Structure:
+
+The application structure is clear, with routes well-defined for different pages (Home, JobPage, AddJobPage, etc.).
+The code follows the best practice of separating concerns by defining components for navigation (Navbar) and each route page.
+Authentication Handling:
+
+Authentication state (isAuthenticated) is managed through useState, with an initial value fetched from localStorage. This allows the app to persist the user’s login session across refreshes.
+Routes for signup and login conditionally redirect authenticated users to the home page, which is a good UX practice.
+Conditional Navigation:
+
+Proper usage of Navigate to handle redirecting users when they try to access login or signup pages while already authenticated. This prevents logged-in users from accessing these pages unnecessarily.
+404 Handling:
+
+A Route is set up to handle undefined paths with a NotFoundPage, which improves the overall user experience by handling broken or undefined routes gracefully.
+
+Suggestions:
+Loading and Error States:
+
+Consider adding loading and error states when interacting with the authentication system, especially when making asynchronous requests (e.g., logging in or signing up).
+UI Feedback:
+
+Provide feedback to users during transitions, such as a loading spinner or an alert if they’re redirected from a protected route.
+
+### The navbar is dynamic: will change after logged in but all other jobs related options is available without authentication
+
+```js
+// Navbar
+const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+  const handleClick = (e) => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("user");
+  };
+
+  return (
+    <nav className="navbar">
+      <Link to="/">
+        <h1>React Jobs</h1>
+      </Link>
+      <div className="links">
+        {isAuthenticated && (
+          <div>
+            <Link to="/jobs/add-job">Add Job</Link>
+            <span>{JSON.parse(localStorage.getItem("user")).username}</span>
+            <button onClick={handleClick}>Log out</button>
+          </div>
+        )}
+        {!isAuthenticated && (
+          <div>
+            <Link to="/jobs/add-job">Add Job</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+ChatGPT assessment:
+The Navbar component you've written provides a clear navigation UI with appropriate links for authenticated and unauthenticated users. It handles logouts and switches between states smoothly. However, there are a few improvements and optimizations that can be made to improve its functionality, security, and overall performance.
+
+Strengths:
+Conditional Rendering:
+The component handles conditional rendering based on the isAuthenticated state. It shows appropriate links for authenticated and unauthenticated users.
+Logout Functionality:
+The logout functionality is handled well by removing the user from localStorage and setting the authentication state to false.
+
+Suggestions:
+The Navbar component works well, but can benefit from a few optimizations:
+ - Avoid directly accessing localStorage in JSX.
+ - Handle user data in a more secure and efficient way.
+ - Improve code readability and reduce redundancy in links. (this redundancy is intended)
+ - Redirect users after logging out.
+
+### Other work including hooks: useLogin, useSignup, useField for overall modularity
 ```js
 // File name or function
 // Your code part B
