@@ -64,6 +64,28 @@ describe("User Routes", () => {
       expect(result.status).toBe(400);
       expect(result.body).toHaveProperty("error");
     });
+    it("should return an error when username already exists", async () => {
+      // Arrange
+      const userData = {
+        name: "George_Giorcescu",
+        username: "Georginelfutanel",
+        password: "R3g5T7#gh",
+        phone_number: "09-123-47890",
+        gender: "Female",
+        date_of_birth: "1999-01-01",
+        membership_status: "Active",
+        address: "Aleea pieni"
+      };
+    
+      // Act
+      await api.post("/api/users/signup").send(userData);
+      const result = await api.post("/api/users/signup").send(userData);
+    
+      // Assert
+      expect(result.status).toBe(400);
+      expect(result.body).toHaveProperty("error");
+    });
+
   });
 
   describe("POST /api/users/login", () => {
