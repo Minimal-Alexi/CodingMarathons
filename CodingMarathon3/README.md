@@ -936,6 +936,105 @@ The Navbar component works well, but can benefit from a few optimizations:
 ### Other work including hooks: useLogin, useSignup, useField for overall modularity
 
 ```js
+// useField
+import { useState } from "react";
+
+export default function useField(type) {
+  const [value, setValue] = useState("");
+
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  return { type, value, onChange };
+};
+```
+```js
+// useLogin
+import { useState } from "react";
+
+export default function useLogin(url) {
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
+
+    const login = async (object) => {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(object),
+        });
+        const user = await response.json();
+    
+        if (!response.ok) {
+          setError(user.error);
+          setIsLoading(false);
+          return error;
+        }
+    
+        localStorage.setItem("token", user.token);
+        localStorage.setItem("user", JSON.stringify(user));
+        setIsLoading(false);
+      };
+
+      return { login, isLoading, error };
+}
+```
+```js
+// use Signup
+import { useState } from "react";
+
+export default function useSignup(url) {
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+
+  const signup = async (object) => {
+    setIsLoading(true);
+    setError(null);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(object),
+    });
+    const user = await response.json();
+
+    if (!response.ok) {
+      console.log(user.error);
+      setError(user.error);
+      setIsLoading(false);
+      return error;
+    }
+
+    localStorage.setItem("user", JSON.stringify(user));
+    setIsLoading(false);
+  };
+
+  return { signup, isLoading, error };
+}
+```
+ChatGPT assessemt:
+
+useField Hook
+Strengths: Simple and reusable for managing input fields.
+Improvements:
+Add a reset function to clear the field.
+Allow an initial value as a parameter for flexibility.
+
+useLogin Hook
+Strengths: Manages login state, handles API call, and stores user/token in localStorage.
+Improvements:
+Use isLoading: false as the initial state.
+Add a try-catch for network error handling.
+Return the user data upon successful login.
+
+useSignup Hook
+Strengths: Similar to useLogin, handles signup state and API call.
+Improvements:
+Same enhancements as useLogin: initial isLoading: false, try-catch for errors, return the user after successful signup.
+
+```js
 // File name or function
 // Your code part B
 ```
