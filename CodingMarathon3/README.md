@@ -321,6 +321,423 @@ Realistic Data: Test data provided (e.g., usernames, passwords) appears realisti
 
 ---------------------------------------------------------------------------------------------------------------------------
 
+# Vikko Veikkolainen
+
+## Frontend
+
+```js
+// Login.jsx
+
+import { useState } from "react";
+import useLogin from "../hooks/useLogin";
+import useField from '../hooks/useField';
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+
+    const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const usernameField = useField("text", username, setUsername);
+    const passwordField = useField("password", password, setPassword);
+
+    const { login, error } = useLogin("/api/users/login")
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        await login({
+            username: username,
+            password: password,
+        });
+        if (!error) {
+            console.log("success");
+            navigate("/");
+        }
+    }
+
+    return (
+        <div className="login">
+            <h2>Log in</h2>
+            <form onSubmit={handleFormSubmit}>
+                <label>username:</label>
+                <input {...usernameField} />
+                <label>Password:</label>
+                <input {...passwordField} />
+                <button>Log in</button>
+            </form>
+        </div>
+    )
+};
+
+export default Login;
+```
+
+ChatGPT assessment:
+
+Overall review:
+  The code provided is a functional login component built using React and the react-router-dom library for navigation. It utilizes custom hooks (useLogin and useField) to manage form state and login logic, and implements a clean and concise way of handling form submission and user authentication. The structure is clear, and the separation of concerns through custom hooks makes the code reusable and maintainable. However, there are areas that could be improved in terms of error handling, UX, and code optimization.
+
+Strengths:
+  Custom Hook Usage: The use of useField for managing form fields is a good example of modular and reusable code. By abstracting field behavior into a hook, you've made the form fields generic and reusable for other forms in the application. Similarly, useLogin encapsulates the login logic, promoting separation of concerns.
+
+  Clean and Readable Code: The component follows a clear and readable structure. Variable names are intuitive, making it easy for other developers to understand the code at a glance.
+
+  Form Handling: The form submission logic is straightforward and avoids unnecessary complexity. The asynchronous nature of the login process is handled well with async/await.
+
+  Navigation Post-Login: After a successful login, the use of useNavigate to redirect users to the home page is a standard and effective approach to guide users.
+
+
+Weaknesses:
+  Error Handling: While the component captures the error object from useLogin, there is no logic in place to display error messages or feedback to the user if login fails. This can lead to a poor user experience as users won't know why their login attempt failed.
+
+  Form Validation: The current form does not have any validation logic for the username and password fields. A user can submit the form with empty fields, which could lead to errors during the login request.
+
+  No Loading State: The code does not handle a "loading" state during the async login process. Without visual feedback, the user may try to resubmit the form or navigate away while the request is still being processed, leading to confusion.
+
+  Potential Redundant State Management: The useState hooks for username and password in combination with useField may be redundant. Since useField already manages the state internally, you might not need to separately define useState for each field.
+
+  Inconsistent Naming: While usernameField and passwordField are descriptive, naming can sometimes be confusing because they represent more than just the field—they encapsulate the entire field's props. A more intuitive name, like usernameProps or passwordProps, could make it clearer that these spread the input properties.
+
+
+Improvements:
+  Add Error Feedback: Implement logic to display error messages to the user when login fails. For example, show a message below the form indicating what went wrong (e.g., "Invalid username or password"). This improves the user experience and helps users correct their input.
+
+  Form Validation: Introduce basic form validation to ensure that the username and password fields are not empty before the form is submitted. Optionally, you could add more advanced validation rules, such as minimum length for the password or username format.
+
+  Loading Indicator: Add a loading state during the login process to prevent multiple submissions and indicate to the user that the request is being processed. This could be a simple "Loading..." message or a spinner next to the submit button.
+
+  Remove Redundant State: Since useField manages the value and setValue internally, you could consider removing the explicit useState hooks for username and password, further simplifying the code.
+
+  Improve Error Handling Logic: If login throws an error (e.g., network failure), make sure it's handled properly within handleFormSubmit. You can also reset the error state when the user changes the input to allow for another attempt without the error message persisting.
+
+  Consider Disabled Button: Disable the "Log in" button when the form is incomplete or during the login request to prevent repeated submissions or incorrect inputs.
+
+
+```js
+// Signup.jsx
+
+import { useState } from "react";
+import useSignup from "../hooks/useSignup";
+import { useNavigate } from "react-router-dom";
+import useField from '../hooks/useField';
+
+const Signup = () => {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [gender, setGender] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [membershipStatus, setMembershipStatus] = useState('');
+  const [address, setAddress] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+
+  const nameField = useField("text", name, setName);
+  const usernameField = useField("username", username, setUsername);
+  const passwordField = useField("password", password, setPassword);
+  const phoneNumberField = useField("text", phoneNumber, setPhoneNumber);
+  const genderField = useField("text", gender, setGender);
+  const dateOfBirthField = useField("date", dateOfBirth, setDateOfBirth);
+  const membershipStatusField = useField("text", membershipStatus, setMembershipStatus);
+  const addressField = useField("address", address, setAddress);
+  const profilePictureField = useField("text", profilePicture, setProfilePicture);
+
+  const { signup, error } = useSignup("/api/users/signup");
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    await signup({
+      name: name,
+      username: username,
+      password: password,
+      phone_number: phoneNumber,
+      gender: gender,
+      date_of_birth: dateOfBirth,
+      membership_status: membershipStatus,
+      address: address,
+      profile_picture: profilePicture
+    });
+    if (!error) {
+      console.log("success");
+      navigate("/");
+    }
+  };
+
+  return (
+    <div className="create">
+      <h2>Sign Up</h2>
+      <form onSubmit={handleFormSubmit}>
+        <label>Name:</label>
+        <input {...nameField} />
+        <label>Usename:</label>
+        <input {...usernameField} />
+        <label>Password:</label>
+        <input {...passwordField} />
+        <label>Phone Number:</label>
+        <input {...phoneNumberField} />
+        <label>Gender:</label>
+        <input {...genderField} />
+        <label>Date of Birth:</label>
+        <input {...dateOfBirthField} />
+        <label>Membership Status:</label>
+        <input {...membershipStatusField} />
+        <label>Address:</label>
+        <input {...addressField}/>
+        <label>Profile picture:</label>
+        <input {...profilePictureField}/>
+        <button>Sign up</button>
+      </form>
+    </div>
+  );
+};
+
+export default Signup;
+```
+
+ChatGPT assessment:
+
+Overall review:
+  The code provided is a React functional component that handles user signup functionality. It uses custom hooks to manage input fields and a signup process. The component is organized and clear in its structure, making use of modular hooks to encapsulate functionality. However, there are several areas for improvement regarding error handling, form validation, and user experience enhancements.
+
+
+Strengths:
+  Modular Code Structure: The component leverages custom hooks (useField and useSignup) to handle form inputs and signup logic, promoting reusability and separation of concerns. This modularity makes the component easier to maintain and extend.
+
+  Clear Variable Naming: The variable names are intuitive and descriptive, allowing other developers to quickly understand the purpose of each state and field. This improves the readability and maintainability of the code.
+
+  Comprehensive User Information: The form collects a wide range of user information (name, username, password, etc.), which can enhance the application's user management capabilities.
+
+  Asynchronous Form Submission: The use of async/await for the signup process is well-implemented. It keeps the code concise and easy to follow.
+
+  Navigation on Success: Upon successful signup, the component navigates users to the home page using useNavigate, which is a good practice to enhance user experience.
+
+
+Weaknesses:
+  Lack of Error Handling: Similar to the login component, there is no mechanism to display errors to the user if the signup fails. This can lead to confusion for users who might not understand why their signup attempt was unsuccessful.
+
+  Form Validation: The component does not include validation for the fields. Users can submit the form with empty fields or invalid data, which could cause errors during the signup request. For example, a username could be required to meet specific criteria (length, character type).
+
+  No Loading Indicator: There is no indication of loading or processing after the signup button is clicked. A loading state would inform users that their request is being processed and prevent multiple submissions.
+
+  Redundant State Management: The use of useState hooks for each form field alongside useField may be unnecessary, as useField already encapsulates state management. This leads to increased code complexity without added value.
+
+  Consistent Input Types: For fields like phone number and gender, using text as the input type is not optimal. This could lead to format errors or inconsistencies in user input. Using appropriate input types would improve data validation and user experience.
+
+  Inconsistent Naming for Input Types: The input type for username should be "text" rather than "username" to match standard HTML input types. Additionally, the label for the username field has a typo (“Usename” instead of “Username”), which could confuse users.
+
+
+Improvements:
+  Implement Error Feedback: Enhance user experience by displaying error messages if the signup process fails. This could include feedback such as "Username already taken" or "Please fill out all fields."
+
+  Add Form Validation: Introduce validation logic for each field to ensure users provide the necessary information in the correct format before submission. This can include checks for required fields, maximum lengths, and proper formats for phone numbers.
+
+  Incorporate Loading State: Implement a loading state during the signup process to give users feedback that their request is being processed. This can be done by disabling the submit button and showing a spinner or loading message.
+
+  Remove Redundant State Management: Since useField handles the state internally, consider removing the separate useState hooks for each field. This would simplify the code and reduce redundancy.
+
+  Use Appropriate Input Types: Update the input types for fields like phone number (should be tel) and date of birth (should be date) to improve data validation and enhance user experience.
+
+  Fix Input Type for Username: Change the usernameField input type from "username" to "text" to comply with standard HTML input types. Additionally, correct the label typo from “Usename” to “Username.”
+
+  Consider Disabled Button for Incomplete Forms: Disable the "Sign up" button when the form is incomplete to prevent users from submitting invalid data.
+
+  Add a Confirmation for Successful Signup: Beyond logging success to the console, consider providing user feedback, such as a success message or visual indication of a successful signup.
+
+
+## Backend
+
+```js
+//job.test.js
+
+const mongoose = require("mongoose");
+const supertest = require("supertest");
+const app = require("../app");
+const api = supertest(app);
+const Jobs = require("../models/jobModel");
+
+let token = null;
+
+beforeAll(async () => {
+    await Jobs.deleteMany({});
+    const result = await api.post("/api/users/signup").send({
+        name: "John Doe",
+        username: "john@example.com",
+        password: "password123",
+        phone_number: "1234567890",
+        gender: "Male",
+        date_of_birth: "1990-01-01",
+        membership_status: "Inactive",
+        address: "address",
+    });
+    token = result.body.token;
+});
+
+describe("Job API", function () {
+    beforeEach(async () => {
+        await Jobs.deleteMany({});
+
+        job = {
+            title: "John Doe",
+            type: "Full-time",
+            description: "password123",
+            company: {
+                name: "name",
+                contactEmail: "Male@example.com",
+                contactPhone: "19900101",
+            },
+            location: "Inactive",
+            salary: "255423",
+        }
+
+        const result = await api
+            .post("/api/jobs")
+            .send(job)
+            .set("Authorization", "bearer " + token)
+    });
+
+    describe("GET /jobs", () => {
+        it('should return all jobs', async () => {
+            await api
+                .get("/api/jobs")
+                .set("Authorization", "bearer " + token)
+                .expect(200)
+                .expect("Content-Type", /application\/json/);
+        });
+
+        it('should get one job by id', async () => {
+            console.log("entered test")
+
+            const job = await Jobs.findOne();
+
+            console.log(job)
+
+            await api
+                .get("/api/jobs/" + job._id)
+                .set("Authorization", "bearer " + token)
+                .expect(200)
+                .expect("Content-Type", /application\/json/);
+        })
+    })
+
+    describe("POST /jobs", () => {
+        it('should create a new job', async () => {
+            console.log("entered test")
+
+            const newJob = {
+                title: "job",
+                type: "Full-time",
+                description: "description",
+                company: {
+                    name: "name",
+                    contactEmail: "email@email.email",
+                    contactPhone: "1234567",
+                },
+                location: "location",
+                salary: 1234567,
+            };
+
+            const response = await api
+                .post("/api/jobs")
+                .set("Authorization", "bearer " + token)
+                .send(newJob)
+                .expect(201)
+                .expect("Content-Type", /application\/json/);
+        });
+    });
+
+    describe("PUT /jobs", () => {
+        it('should update job by id', async () => {
+            const job = await Jobs.findOne();
+            const updatedJob = {
+                type: "Lmao",
+                description: "Bad",
+            };
+
+            const response = await api
+                .put(`/api/jobs/${job._id}`)
+                .set("Authorization", "bearer " + token)
+                .send(updatedJob)
+                .expect(200)
+                .expect("Content-Type", /application\/json/);
+
+            console.log("Response body:", response.body);
+
+            const updatedjobCheck = await Jobs.findById(job._id);
+            console.log("Updated job:", updatedjobCheck);
+
+            expect(updatedjobCheck.type).toBe(updatedJob.type);
+            expect(updatedjobCheck.description).toBe(updatedJob.description);
+        })
+    })
+
+    describe("Delete /jobs", () => {
+        it('should delete job by id', async () => {
+            const job = await Jobs.findOne();
+            await api
+                .delete(`/api/jobs/${job._id}`)
+                .set("Authorization", "bearer " + token)
+                .expect(204)
+            const jobCheck = await Jobs.findById(job._id);
+            expect(jobCheck).toBeNull();
+        })
+    })
+})
+```
+
+ChatGPT assessment:
+
+Overall review:
+  The provided code is a set of automated tests for a job management API using Jest and Supertest. It covers various endpoints, including the creation, retrieval, updating, and deletion of job listings. The tests are well-structured and demonstrate good use of setup and teardown methods to ensure a clean state for each test. However, there are several areas for improvement regarding clarity, error handling, and overall test robustness.
+
+
+Strenghts:
+  Modular Test Structure: The use of describe blocks to organize tests based on API endpoints (GET, POST, PUT, DELETE) makes the code modular and easy to navigate. Each group of tests is clearly defined, improving readability.
+
+  Before Hooks for Setup: The beforeAll and beforeEach hooks are effectively used to clean up the database before tests run and set up the necessary data for the tests. This ensures that each test runs in isolation and that there are no side effects from previous tests.
+
+  Use of Supertest: The integration of Supertest for making HTTP requests allows for a straightforward way to test the API endpoints. It provides an intuitive API for defining requests and expectations.
+
+  Comprehensive Coverage: The tests cover a wide range of scenarios, including getting all jobs, creating a job, updating a job, and deleting a job. This ensures that the core functionalities of the job API are tested.
+
+  Assertions on Database State: After the PUT and DELETE operations, assertions are made to check the state of the database. This ensures that the operations not only return the expected status codes but also perform the intended changes in the database.
+
+
+Weaknesses:
+  Lack of Error Handling: The tests do not handle or assert on error cases. For instance, scenarios like attempting to create a job without necessary fields or trying to delete a job that doesn’t exist are not tested. This can lead to a false sense of security about the robustness of the API.
+
+  Hardcoded User Data: The user signup data used in beforeAll is hardcoded, which might not be ideal for tests that could potentially be run multiple times. This could lead to conflicts or errors if the user already exists in the database.
+
+  Job Creation Logic in BeforeEach: Although jobs are created in the beforeEach block, the specific job data is not reused or validated. It would be more efficient to create a job in a specific test instead, rather than before each test, to keep the tests independent.
+
+  Console Logging for Debugging: The code contains several console.log statements for debugging purposes. While these can be helpful during development, they should be removed or replaced with proper logging for production code to avoid cluttering the test output.
+
+  No Tests for Validation Errors: The tests do not check for proper validation responses when incorrect data is sent to the API. For example, sending a job with missing required fields should return a 400 status code.
+
+  Inconsistent Use of Comments: While some sections are well-commented, others lack comments explaining the purpose of specific tests or logic. Adding comments can improve clarity for future maintainers or developers unfamiliar with the code.
+
+
+Improvements:
+  Add Error Handling Tests: Introduce tests to handle and assert on various error cases, such as trying to create jobs with missing required fields or incorrect data formats. This will enhance the robustness of the test suite.
+
+  Dynamic User Creation: Instead of hardcoding user data, consider implementing a utility function to create users dynamically for each test run. This will prevent conflicts and ensure the database remains clean.
+
+  Optimize Job Creation: Instead of creating a job in the beforeEach block, consider refactoring the tests so that job creation occurs only when necessary, ensuring independence among tests.
+
+  Remove Debugging Logs: Clean up the code by removing console.log statements or replace them with more structured logging only in environments where debugging is needed.
+
+  Validation Error Tests: Add tests to check how the API responds when given invalid input. This will ensure the API correctly handles edge cases and provides meaningful feedback to clients.
+
+  Enhance Comments and Documentation: Improve inline documentation to explain the purpose and expected behavior of various tests. This will assist future developers in understanding the test structure and objectives.
+
+  Use Consistent Naming Conventions: Ensure consistent naming conventions throughout the tests, particularly for variables and functions. For example, naming the job variable consistently can improve code readability.
+
+  Consider Using Test Data Factories: Implement data factories or utility functions for creating test data. This can help streamline the creation of various entities (users, jobs) and maintain consistency across tests.
+
+---------------------------------------------------------------------------------------------------------------------------
+
 ### Backend-no-auth
 
 Loc Dang
