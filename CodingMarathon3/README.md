@@ -319,6 +319,8 @@ Isolation:
 
 Realistic Data: Test data provided (e.g., usernames, passwords) appears realistic and follows typical patterns for a signup process.
 
+---------------------------------------------------------------------------------------------------------------------------
+
 ### Backend-no-auth
 
 Loc Dang
@@ -791,6 +793,7 @@ const errorHandler = (err, req, res, next) => {
 };
 app.use(errorHandler);
 ```
+---------------------------------------------------------------------------------------------------------------------------
 
 
 
