@@ -14,9 +14,9 @@
 
 ## Self-Assessment of Code
 
-### Frontend
+## Pop Alex
 
-Pop Alex
+### Frontend
 
 ```js
 /// job context
@@ -177,8 +177,6 @@ Reusability: The hook is reusable across different types of input fields, since 
 
 ### Backend
 
-Pop Alex
-
 User Testing
 
 ```js
@@ -314,16 +312,16 @@ Clear Structure: The code is well-structured with tests neatly organized into de
 Test Coverage: The tests cover both valid and invalid cases for signup and login, ensuring that both successful operations and error cases are tested.
 Isolation:
 
-    The beforeAll function deletes all users from the database before running the tests. This ensures that the tests run in isolation and don't interfere with each other or with leftover data from previous test runs.
-    afterAll ensures that the database connection is closed after all tests complete, preventing resource leaks.
+The beforeAll function deletes all users from the database before running the tests. This ensures that the tests run in isolation and don't interfere with each other or with leftover data from previous test runs.
+afterAll ensures that the database connection is closed after all tests complete, preventing resource leaks.
 
 Realistic Data: Test data provided (e.g., usernames, passwords) appears realistic and follows typical patterns for a signup process.
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-# Vikko Veikkolainen
+## Vikko Veikkolainen
 
-## Frontend
+### Frontend
 
 ```js
 // Login.jsx
@@ -547,7 +545,7 @@ Improvements:
   Add a Confirmation for Successful Signup: Beyond logging success to the console, consider providing user feedback, such as a success message or visual indication of a successful signup.
 
 
-## Backend
+### Backend
 
 ```js
 //job.test.js
